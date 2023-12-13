@@ -2,12 +2,17 @@ import express from 'express';
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+
 import authRouter from './routes/auth.js';
 import rsaRouter from './routes/rsa.js';
+
 import validateJWT from './middlewares/jwt.js';
+import { generateKeyPair } from './utils/rsa.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+generateKeyPair();
 
 const app = express();
 

@@ -12,7 +12,28 @@
       <section class="content">
         <div class="card">
           <div class="card-body">
-            <span class="title">LOGIN</span>
+            <span class="title">Cifrado RSA</span>
+            <label class="switch-wrapper">
+              <span>Cifrar</span>
+              <div class="switch">
+                <input type="checkbox" id="type-encrypt">
+                <span class="slider">
+                  <span class="circle"></span>
+                </span>
+              </div>
+              <span>Descifrar</span>
+            </label>
+
+            <form id="form">
+              <div class="input-group">
+                <input type="file" name="file" id="file">
+              </div>
+
+              <div class="actions">
+                <button class="lg" type="submit" id="send">Cifrar</button>
+              </div>
+            </form>
+
           </div>
       </section>
       </div>
@@ -20,5 +41,5 @@
   </div>
 </body>
 
-<script src="js/index.js"></script>
+<script src="../js/rsa.js"></script>
 </html>

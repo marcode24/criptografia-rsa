@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import fs from 'fs';
 import { response } from 'express';
 import { fileURLToPath } from 'url';
@@ -14,9 +15,12 @@ const encrypt = (req, res = response) => {
     const encryptedResults = encryptData(file.buffer.toString('utf-8'));
     const combinedBuffer = Buffer.concat(encryptedResults);
 
-    const srcDir = resolve(__dirname, '..');
+    const srcDir = resolve(__dirname, '..', '..');
+    // eslint-disable-next-line no-console
+    console.log({ srcDir });
     const time = new Date().getTime();
-    const absolutePath = join(srcDir, 'uploads', `${file.fieldname}_${time}.rsa`);
+    const absolutePath = join(srcDir, 'src', 'uploads', `${file.fieldname}_${time}.rsa`);
+    console.log({ absolutePath });
     fs.writeFileSync(absolutePath, combinedBuffer);
 
     res.download(absolutePath, {}, (err) => {

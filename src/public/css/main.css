@@ -106,21 +106,14 @@ input:focus {
 
 .actions {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: flex-end;
   width: 100%;
-}
-
-.errors {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   gap: 0.5rem;
 }
 
-.errors .error {
-  font-size: 0.8rem;
+.message {
+  font-size: 1rem;
   font-weight: 600;
   color: var(--fc-primary)
 }

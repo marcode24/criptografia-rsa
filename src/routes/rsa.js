@@ -1,19 +1,27 @@
 import Router from 'express';
 import {
   emptyFileErrorHandler,
-  extensionErrorHandler,
+  extensionEncryptErrorHandler,
+  extensionDecryptErrorHandler,
   fileSizeLimitErrorHandler,
   uploadConfig,
 } from '../middlewares/multer.js';
-import { encrypt } from '../controllers/rsa.js';
+import { decrypt, encrypt } from '../controllers/rsa.js';
 
 const router = Router();
 
 router.post('/encrypt', [
   uploadConfig,
-  extensionErrorHandler,
+  extensionEncryptErrorHandler,
   fileSizeLimitErrorHandler,
   emptyFileErrorHandler,
 ], encrypt);
+
+router.post('/decrypt', [
+  uploadConfig,
+  extensionDecryptErrorHandler,
+  fileSizeLimitErrorHandler,
+  emptyFileErrorHandler,
+], decrypt);
 
 export default router;

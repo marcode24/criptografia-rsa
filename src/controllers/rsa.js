@@ -3,7 +3,7 @@ import { response } from 'express';
 import { fileURLToPath } from 'url';
 import { dirname, resolve, join } from 'path';
 
-import { encryptData } from '../utils/rsa.js';
+import { encryptData, decryptData } from '../utils/rsa.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -11,10 +11,9 @@ const __dirname = dirname(__filename);
 const encrypt = (req, res = response) => {
   try {
     const { file } = req;
-
-    const publicPEM = fs.readFileSync('public_key.pem', 'utf-8');
-    const encryptedResults = encryptData(file.buffer.toString('utf-8'), publicPEM);
+    const encryptedResults = encryptData(file.buffer.toString('utf-8'));
     const combinedBuffer = Buffer.concat(encryptedResults);
+
     const srcDir = resolve(__dirname, '..');
     const time = new Date().getTime();
     const absolutePath = join(srcDir, 'uploads', `${file.fieldname}_${time}.rsa`);
@@ -36,10 +35,16 @@ const encrypt = (req, res = response) => {
   }
 };
 
-// eslint-disable-next-line no-unused-vars
 const decrypt = (req, res) => {
-  // eslint-disable-next-line no-console
-  console.log('llego a decrypt');
+  try {
+    const { file } = req;
+    const decryptedResult = decryptData(file.buffer);
+    res.json({ result: decryptedResult, status: 200 });
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Error durante el descifrado:', error);
+    res.status(500).send('Error durante el descifrado');
+  }
 };
 
 export { encrypt, decrypt };

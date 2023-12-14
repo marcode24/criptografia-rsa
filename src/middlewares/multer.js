@@ -22,7 +22,7 @@ const emptyFileErrorHandler = (req, res, next) => {
     : res.status(400).json({ message: 'No file uploaded' });
 };
 
-const extensionErrorHandler = (req, res, next) => {
+const extensionEncryptErrorHandler = (req, res, next) => {
   const { originalname } = req.file;
   const extension = originalname.split('.').pop();
   return ALLOWED_EXTENSIONS.includes(extension)
@@ -30,8 +30,17 @@ const extensionErrorHandler = (req, res, next) => {
     : res.status(400).json({ message: 'Invalid file extension' });
 };
 
+const extensionDecryptErrorHandler = (req, res, next) => {
+  const { originalname } = req.file;
+  const extension = originalname.split('.').pop();
+  return extension === 'rsa'
+    ? next()
+    : res.status(400).json({ message: 'Invalid file extension' });
+};
+
 export {
-  extensionErrorHandler,
+  extensionEncryptErrorHandler,
+  extensionDecryptErrorHandler,
   uploadConfig,
   fileSizeLimitErrorHandler,
   emptyFileErrorHandler,

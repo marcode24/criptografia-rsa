@@ -19,7 +19,7 @@ const encrypt = (req, res = response) => {
     // eslint-disable-next-line no-console
     console.log({ srcDir });
     const time = new Date().getTime();
-    const absolutePath = join(srcDir, 'src', 'uploads', `${file.fieldname}_${time}.rsa`);
+    const absolutePath = join(srcDir, 'uploads', `${file.fieldname}_${time}.rsa`);
     console.log({ absolutePath });
     fs.writeFileSync(absolutePath, combinedBuffer);
 

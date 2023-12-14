@@ -24,10 +24,8 @@ const generateKeyPair = () => {
   }
 };
 
-const PRIVATE_KEY = fs.readFileSync('private_key.pem', 'utf-8');
-const PUBLIC_KEY = fs.readFileSync('public_key.pem', 'utf-8');
-
 const encryptData = (data) => {
+  const PUBLIC_KEY = fs.readFileSync('public_key.pem', 'utf-8');
   try {
     const MAX_SIZE = 245; // Tamaño máximo para cifrar con RSA de 4096 bits
     const encryptChunkWithRSA = (chunk) => crypto.publicEncrypt({
@@ -48,6 +46,7 @@ const encryptData = (data) => {
 };
 
 function decryptData(data) {
+  const PRIVATE_KEY = fs.readFileSync('private_key.pem', 'utf-8');
   try {
     const CHUNK_SIZE = 512;
     const chunks = [];

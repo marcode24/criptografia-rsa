@@ -19,7 +19,8 @@ const login = async (req, res = response) => {
 };
 
 const logout = (req, res = response) => {
-  res.json({ message: 'Logout' });
+  res.clearCookie('token');
+  return res.json({ message: 'Logout success', status: 200 });
 };
 
 export { login, logout };

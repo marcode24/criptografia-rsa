@@ -3,12 +3,23 @@ const d = document;
 const $btnSend = d.getElementById('send');
 const $chkType = d.getElementById('type-encrypt');
 const $inputFile = d.getElementById('file');
+const $btnLogout = d.getElementById('logout');
 
 const $form = d.getElementById('form');
 
 const MAX_SIZE = 1024 * 1024 * 5; // 5MB
 const ALLOWED_EXTENSIONS_ENCRYPT = ['txt'];
 const ALLOWED_EXTENSIONS_DECRYPT = ['rsa'];
+
+$btnLogout.addEventListener('click', async () => {
+  const response = await fetch('/auth/logout', {
+    method: 'POST',
+  });
+  const json = await response.json();
+  if (json.status === 200) {
+    window.location.href = '/';
+  }
+});
 
 const showMessages = ({ parent, message, className }) => {
   const messageEl = `<span class="message ${className}">${message}</span>`;

@@ -7,10 +7,12 @@ import {
   uploadConfig,
 } from '../middlewares/multer.js';
 import { decrypt, encrypt } from '../controllers/rsa.js';
+import validateJWT from '../middlewares/jwt.js';
 
 const router = Router();
 
 router.post('/encrypt', [
+  validateJWT,
   uploadConfig,
   extensionEncryptErrorHandler,
   fileSizeLimitErrorHandler,
@@ -18,6 +20,7 @@ router.post('/encrypt', [
 ], encrypt);
 
 router.post('/decrypt', [
+  validateJWT,
   uploadConfig,
   extensionDecryptErrorHandler,
   fileSizeLimitErrorHandler,

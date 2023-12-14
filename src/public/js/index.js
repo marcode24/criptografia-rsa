@@ -2,18 +2,19 @@ const d = document;
 
 const $form = d.getElementById('form');
 
-const redirect = (code) => {
-  const options = {
-    200: '/rsa',
-    401: '/',
-    500: '/',
-  };
-  window.location.href = options[code] || '/';
+const showMessages = ({ parent, message, className }) => {
+  const messageEl = `<span class="message ${className}">${message}</span>`;
+  parent.insertAdjacentHTML('afterend', messageEl);
+};
+
+const clearMessages = () => {
+  const errors = d.querySelectorAll('.message');
+  errors && errors.forEach((el) => el.remove());
 };
 
 $form.addEventListener('submit', async (e) => {
   e.preventDefault();
-
+  clearMessages();
   const user = $form.user.value;
   const password = $form.password.value;
 
@@ -24,8 +25,16 @@ $form.addEventListener('submit', async (e) => {
     },
     body: `user=${user}&password=${password}`,
   });
-  const json = await response.json();
+  const { status } = await response.json();
 
-  redirect(json.status);
+  if (status !== 200) {
+    showMessages({
+      parent: $form.password,
+      message: 'Usuario y/o contraseña incorrectos',
+      className: 'error',
+    });
+    return;
+  }
+  window.location.href = '/rsa';
 });
 

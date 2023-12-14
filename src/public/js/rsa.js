@@ -20,25 +20,55 @@ const clearMessages = () => {
   errors && errors.forEach((el) => el.remove());
 };
 
+const showLoader = () => {
+  const loader = `
+  <svg xmlns="http://www.w3.org/2000/svg"
+    class="icon icon-tabler icon-tabler-loader"
+    width="24" height="24" viewBox="0 0 24 24"
+    stroke-width="2" stroke="currentColor" fill="none"
+    stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M12 6l0 -3" />
+    <path d="M16.25 7.75l2.15 -2.15" />
+    <path d="M18 12l3 0" />
+    <path d="M16.25 16.25l2.15 2.15" />
+    <path d="M12 18l0 3" />
+    <path d="M7.75 16.25l-2.15 2.15" />
+    <path d="M6 12l-3 0" />
+    <path d="M7.75 7.75l-2.15 -2.15" />
+  </svg>`;
+  $btnSend.innerHTML = loader;
+  $btnSend.disabled = true;
+};
+
+const hideLoader = () => {
+  $btnSend.textContent = $chkType.checked ? 'Descifrar' : 'Cifrar';
+  $btnSend.disabled = false;
+};
+
 $chkType.addEventListener('change', () => {
   $btnSend.textContent = $chkType.checked ? 'Descifrar' : 'Cifrar';
+  $inputFile.accept = $chkType.checked
+    ? ALLOWED_EXTENSIONS_DECRYPT.map((ext) => `.${ext}`).join(', ')
+    : ALLOWED_EXTENSIONS_ENCRYPT.map((ext) => `.${ext}`).join(', ');
+  $inputFile.value = '';
+  clearMessages();
+  d.querySelector('.result') && d.querySelector('.result').remove();
 });
 
 const encrypt = async (file) => {
+  showLoader();
   const formData = new FormData();
   formData.append('file', file);
   const response = await fetch('/rsa/encrypt', {
     method: 'POST',
     body: formData,
   });
-
   const blob = await response.blob();
-
   const link = d.createElement('a');
   link.href = window.URL.createObjectURL(blob);
   link.download = 'encrypted.rsa';
   link.click();
-
   window.URL.revokeObjectURL(link.href);
 
   showMessages({
@@ -46,9 +76,22 @@ const encrypt = async (file) => {
     message: 'Archivo cifrado correctamente',
     className: 'success',
   });
+
+  hideLoader();
+};
+
+const buildResult = (data) => {
+  const result = `
+    <div class="result">
+      <h3>Resultado</h3>
+      <textarea readonly>${data}</textarea>
+    </div>
+  `;
+  return result;
 };
 
 const decrypt = async (file) => {
+  showLoader();
   const formData = new FormData();
   formData.append('file', file);
   const response = await fetch('/rsa/decrypt', {
@@ -56,13 +99,10 @@ const decrypt = async (file) => {
     body: formData,
   });
 
-  await response.json();
-
-  showMessages({
-    parent: $btnSend,
-    message: 'Archivo descifrado correctamente',
-    className: 'success',
-  });
+  const { result } = await response.json();
+  const message = buildResult(result);
+  $form.insertAdjacentHTML('afterend', message);
+  hideLoader();
 };
 
 const validate = (file) => {

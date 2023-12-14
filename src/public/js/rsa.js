@@ -168,6 +168,7 @@ const validateDecrypt = (file) => {
 $form.addEventListener('submit', (e) => {
   e.preventDefault();
   clearMessages();
+  document.querySelector('.result') && document.querySelector('.result').remove();
   const file = e.target.file.files[0];
 
   if (!file) {

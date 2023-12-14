@@ -1,7 +1,7 @@
 {
   "name": "criptografia-rsa",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a simple project to learn how to use RSA cryptography",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
@@ -12,9 +12,18 @@
     "lint:watch": "npm run lint -- --watch",
     "prepare": "husky install"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "RSA",
+    "cryptography",
+    "nodejs",
+    "express",
+    "joi",
+    "multer",
+    "dotenv",
+    "jsonwebtoken"
+  ],
+  "author": "Marco Cruz",
+  "license": "MIT",
   "devDependencies": {
     "eslint": "^8.55.0",
     "eslint-config-airbnb-base": "^15.0.0",

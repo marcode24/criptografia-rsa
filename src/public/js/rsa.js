@@ -7,7 +7,8 @@ const $btnLogout = d.getElementById('logout');
 
 const $form = d.getElementById('form');
 
-const MAX_SIZE = 1024 * 1024 * 5; // 5MB
+const MAX_SIZE_ENCRYPT = 1024 * 5; // 5KB
+const MAX_SIZE_DECRYPT = 1024 * 1024 * 1; // 1MB
 const ALLOWED_EXTENSIONS_ENCRYPT = ['txt'];
 const ALLOWED_EXTENSIONS_DECRYPT = ['rsa'];
 
@@ -119,10 +120,10 @@ const decrypt = async (file) => {
 const validate = (file) => {
   const { size, name } = file;
   const extension = name.split('.').pop();
-  if (size > MAX_SIZE) {
+  if (size > MAX_SIZE_ENCRYPT) {
     showMessages({
       parent: $inputFile,
-      message: `Tamaño máximo permitido: ${MAX_SIZE / 1024 / 1024}MB`,
+      message: `Tamaño máximo permitido: ${MAX_SIZE_ENCRYPT / 1024}KB`,
       className: 'error',
     });
     return false;
@@ -140,8 +141,18 @@ const validate = (file) => {
 };
 
 const validateDecrypt = (file) => {
-  const { name } = file;
+  const { size, name } = file;
   const extension = name.split('.').pop();
+
+  if (size > MAX_SIZE_DECRYPT) {
+    showMessages({
+      parent: $inputFile,
+      message: `Tamaño máximo permitido: ${MAX_SIZE_DECRYPT / 1024}KB`,
+      className: 'error',
+    });
+    return false;
+  }
+
   if (!ALLOWED_EXTENSIONS_DECRYPT.includes(extension)) {
     showMessages({
       parent: $inputFile,

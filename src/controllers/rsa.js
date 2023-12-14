@@ -15,21 +15,20 @@ const encrypt = (req, res = response) => {
     const encryptedResults = encryptData(file.buffer.toString('utf-8'));
     const combinedBuffer = Buffer.concat(encryptedResults);
 
-    const srcDir = resolve(__dirname, '..', '..');
-    // eslint-disable-next-line no-console
+    const srcDir = resolve(__dirname, '..');
     console.log({ srcDir });
     const time = new Date().getTime();
     const absolutePath = join(srcDir, 'uploads', `${file.fieldname}_${time}.rsa`);
     console.log({ absolutePath });
     fs.writeFileSync(absolutePath, combinedBuffer);
-
+    console.log(fs.existsSync(absolutePath));
     res.download(absolutePath, {}, (err) => {
-      fs.unlinkSync(absolutePath);
-
       if (err) {
         // eslint-disable-next-line no-console
         console.error('Error al enviar el archivo cifrado:', err);
         res.status(500).send('Error al enviar el archivo cifrado');
+      } else {
+        fs.unlinkSync(absolutePath);
       }
     });
   } catch (error) {
